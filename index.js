@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const fs = require('fs');
 if (!fs.existsSync("data.json"))
     fs.writeFileSync("data.json", JSON.stringify({ version: 0, from: 0, data: [] }));
