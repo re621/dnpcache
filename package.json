@@ -1,0 +1,20 @@
+{
+  "name": "@re621/dnpcache",
+  "version": "1.0.0",
+  "description": "Self-updating DNP list for e621.net",
+  "main": "index.js",
+  "scripts": {
+    "fetch": "node index.js"
+  },
+  "keywords": [
+    "e621",
+    "e926",
+    "DNP"
+  ],
+  "author": "bitWolfy",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@re621/zestyapi": "^0.1.5",
+    "simple-git": "^3.12.0"
+  }
+}
