@@ -14,7 +14,7 @@ const E621 = Zesty.connect({
     const newData = [];
     let response, page = 1;
     do {
-        response = await E621.TagImplications.find({ consequent_name: ["avoid_posting", "conditional_dnp"], limit: 320, page: page });
+        response = await E621.TagImplications.find({ consequent_name: ["avoid_posting", "conditional_dnp"], status: "active", limit: 320, page: page });
         for (alias of response.data)
             newData.push(alias.antecedent_name);
         page++;
