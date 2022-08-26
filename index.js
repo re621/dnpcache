@@ -1,6 +1,13 @@
+const fileData = "./dist/data.json",
+    fileMeta = "./dist/meta.json";
+
 const fs = require('fs');
-if (!fs.existsSync("data.json"))
-    fs.writeFileSync("data.json", JSON.stringify({ version: 0, from: 0, data: [] }));
+if (!fs.existsSync("./dist"))
+    fs.mkdirSync("./dist");
+if (!fs.existsSync(fileData))
+    fs.writeFileSync(fileData, JSON.stringify({ version: 0, from: 0, data: [] }));
+if (!fs.existsSync(fileMeta))
+    fs.writeFileSync(fileMeta, JSON.stringify({ version: 0, from: 0 }));
 
 const Zesty = require("@re621/zestyapi");
 const E621 = Zesty.connect({
@@ -21,7 +28,7 @@ const E621 = Zesty.connect({
     } while (response.status.code == 200 && response.data.length == 320);
 
     // Fetch old data
-    const oldFile = JSON.parse(fs.readFileSync("data.json"))
+    const oldFile = JSON.parse(fs.readFileSync(fileData))
     let oldData = oldFile.data;
     console.log("old", oldData.length);
 
@@ -33,16 +40,21 @@ const E621 = Zesty.connect({
 
     if (added.length == 0 && removed.length == 0) return;
     const version = oldFile.version + 1;
-    fs.writeFileSync("data.json", JSON.stringify({
+    fs.writeFileSync(fileData, JSON.stringify({
         version: version,
         from: (new Date()).getTime(),
         data: newData
+    }, null, 2));
+    fs.writeFileSync(fileMeta, JSON.stringify({
+        version: version,
+        from: (new Date()).getTime(),
     }, null, 2));
 
     // Commit to git
     const simpleGit = require('simple-git');
     const git = simpleGit();
-    await git.add("data.json");
+    await git.add(fileData);
+    await git.add(fileMeta);
     await git.addConfig("user.name", "bitWolfy");
     await git.addConfig("user.email", "anon.wolfy@pm.me");
 
