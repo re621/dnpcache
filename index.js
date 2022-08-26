@@ -44,11 +44,11 @@ const E621 = Zesty.connect({
         version: version,
         from: (new Date()).getTime(),
         data: newData
-    }, null, 2));
+    }));
     fs.writeFileSync(fileMeta, JSON.stringify({
         version: version,
         from: (new Date()).getTime(),
-    }, null, 2));
+    }));
 
     // Commit to git
     const simpleGit = require('simple-git');
