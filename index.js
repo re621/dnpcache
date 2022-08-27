@@ -1,6 +1,9 @@
 const fileData = "./dist/data.json",
     fileMeta = "./dist/meta.json";
 
+const params = process.argv.slice(2);
+const forceRun = params.length > 0 && params[0] == "override";
+
 const fs = require('fs');
 if (!fs.existsSync("./dist"))
     fs.mkdirSync("./dist");
@@ -38,7 +41,7 @@ const E621 = Zesty.connect({
 
     console.log("added: " + added.length, "removed: " + removed.length);
 
-    if (added.length == 0 && removed.length == 0) return;
+    if (!forceRun && added.length == 0 && removed.length == 0) return;
     const version = oldFile.version + 1;
     fs.writeFileSync(fileData, JSON.stringify({
         version: version,
