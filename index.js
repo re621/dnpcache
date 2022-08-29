@@ -63,21 +63,29 @@ const E621 = Zesty.connect({
 
     // Generate the commit name
     let message = "";
+    let extra = "";
     if (added.length > 0) {
-        if (removed.length > 0)
+        if (removed.length > 0) {
             message = `Add ${added.length} and remove ${removed.length} artist${removed.length > 1 ? "s" : ""} from the DNP list.`
-        else {
-            if (added.length > 2) message = `Add ${added.length} artists to the DNP list.`;
-            else if (added.length == 2) message = `Add ${added[0]} and ${added[1]} to the DNP list.`;
+            extra = `Added: ${added.join(", ")}\nRemoved: ${removed.join(", ")}`;
+        } else {
+            if (added.length > 2) {
+                message = `Add ${added.length} artists to the DNP list.`;
+                extra = `Added: ${added.join(", ")}`;
+            } else if (added.length == 2) message = `Add ${added[0]} and ${added[1]} to the DNP list.`;
             else message = `Add ${added[0]} to the DNP list.`
         }
     } else {
-        if (removed.length > 2) message = `Remove ${removed.length} artists from the DNP list.`;
-        else if (removed.length == 2) message = `Remove ${removed[0]} and ${removed[1]} from the DNP list.`;
+        if (removed.length > 2) {
+            message = `Remove ${removed.length} artists from the DNP list.`;
+            extra = `Removed: ${removed.join(", ")}`;
+        } else if (removed.length == 2) message = `Remove ${removed[0]} and ${removed[1]} from the DNP list.`;
         else message = `Remove ${removed[0]} from the DNP list.`
     }
 
-    await git.commit([message]);
+    const content = [message];
+    if (extra) content.push(extra);
+    await git.commit(content);
     await git.addTag("" + version);
     await git.push();
     await git.push(["--tags"]);
